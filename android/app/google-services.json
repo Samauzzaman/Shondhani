@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "40532259510",
+    "project_id": "blooddonation-fceb3",
+    "storage_bucket": "blooddonation-fceb3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:40532259510:android:be6da6735a5c7922386c17",
+        "android_client_info": {
+          "package_name": "com.shondhani.blood_donation"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "40532259510-8r1urmrta4bpgvo22mbpupmlk58vpvhl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA7n8lWZDvKZjpUnlToQ6TsuY_7Ry1BDp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "40532259510-8r1urmrta4bpgvo22mbpupmlk58vpvhl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
