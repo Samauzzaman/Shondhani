@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "40532259510-eev16idtb2rsgcvc89gtj8hg4d9qerlo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.shondhani.blood_donation",
+            "certificate_hash": "b4e48fee6ef6bf27e60a50e6fccbb166d4073ee3"
+          }
+        },
+        {
           "client_id": "40532259510-8r1urmrta4bpgvo22mbpupmlk58vpvhl.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,6 +37,13 @@
             {
               "client_id": "40532259510-8r1urmrta4bpgvo22mbpupmlk58vpvhl.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "40532259510-5j9g6rv3al2ttbd5r6lqmg5ouis8sbg6.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.bloodDonation"
+              }
             }
           ]
         }
