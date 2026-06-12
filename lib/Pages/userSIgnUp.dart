@@ -24,20 +24,23 @@ class _UsersignupState extends State<Usersignup> {
   bool isObscure = true;
   bool isLoading = false;
 
+  // 1. Added variables for the Dropdown
+  String? selectedBloodGroup;
+  final List<String> bloodGroups = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
   TextEditingController nameController = TextEditingController();
   TextEditingController rollController = TextEditingController();
   TextEditingController batchController = TextEditingController();
-  TextEditingController bloodController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPassController = TextEditingController();
+
   @override
   void dispose() {
     nameController.dispose();
     rollController.dispose();
     batchController.dispose();
-    bloodController.dispose();
     mobileController.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -49,7 +52,8 @@ class _UsersignupState extends State<Usersignup> {
     final name = nameController.text.trim();
     final roll = rollController.text.trim();
     final batch = batchController.text.trim();
-    final blood = bloodController.text.trim();
+    // 2. Grabbing the value from the dropdown instead of a controller
+    final blood = selectedBloodGroup ?? '';
     final mobile = mobileController.text.trim();
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
@@ -150,7 +154,7 @@ class _UsersignupState extends State<Usersignup> {
               icon: Icon(CupertinoIcons.back, color: textColor()),
             ),
             centerTitle: true,
-            title: Text('User Sign Up', style: TextStyle(color: Colors.white)),
+            title: Text('User SignUp', style: TextStyle(color: Colors.white)),
             backgroundColor: uiBackgroundColor(),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(15)),
@@ -170,6 +174,7 @@ class _UsersignupState extends State<Usersignup> {
                 ),
               ),
             ),
+
           ),
         ),
       ),
@@ -272,8 +277,7 @@ class _UsersignupState extends State<Usersignup> {
                   ),
                 ),
 
-                  //blood group
-
+                // Blood Group Dropdown
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Container(
@@ -290,14 +294,24 @@ class _UsersignupState extends State<Usersignup> {
                       ],
                     ),
                     child: Padding(
-                      padding: EdgeInsets.fromLTRB(8.0, 0, 0, 0),
-                      child: TextField(
-                        controller: bloodController,
-                        keyboardType: TextInputType.text,
-                        autofocus: true,
-                        decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Blood group:',
+                      padding: EdgeInsets.fromLTRB(8.0, 0, 15.0, 0), // Extra right padding for the arrow
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: selectedBloodGroup,
+                          hint: Text('Blood group:'),
+                          isExpanded: true, // Makes it stretch to fill the container like a TextField
+                          icon: Icon(CupertinoIcons.chevron_down, color: Colors.grey),
+                          items: bloodGroups.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedBloodGroup = newValue;
+                            });
+                          },
                         ),
                       ),
                     ),
@@ -305,7 +319,6 @@ class _UsersignupState extends State<Usersignup> {
                 ),
 
                 //phone number
-
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: Container(
@@ -455,40 +468,33 @@ class _UsersignupState extends State<Usersignup> {
 
                 //Button
                 Padding(
-                  padding: EdgeInsets.fromLTRB(8, 10, 8, 0),
+                  padding: EdgeInsets.fromLTRB(8, 10, 8, 30), // Added bottom padding so it doesn't hug the edge
                   child: SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       onPressed: () async {
-                        // 1. ADDED setState: This forces the screen to redraw immediately so the button turns green.
                         setState(() {
                           onPressSaveButton = true;
                         });
-
-                        // 2. ADDED await: This tells the code to pause here while the user is on the Demo page.
                         await signUpCheck();
-
-                        // 3. ADDED second setState: When the user hits the "back" button on the Demo page, this resets the button to Red.
                         setState(() {
                           onPressSaveButton = false;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        // 4. FIXED the color logic: If true -> Green. If false -> Red.
                         backgroundColor: onPressSaveButton
                             ? Colors.green
                             : const Color.fromRGBO(180, 0, 0, 1),
-                        foregroundColor: Colors.white, // Text color
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            30,
-                          ), // Matches your TextFields
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        elevation:
-                        5, // Adds a shadow that matches your input fields
+                        elevation: 5,
                       ),
-                      child: const Text(
+                      child: isLoading
+                          ? CircularProgressIndicator(color: Colors.white)
+                          : const Text(
                         'Save',
                         style: TextStyle(
                           fontSize: 18,

@@ -34,19 +34,31 @@ class _UserSignInState extends State<UserSignIn> {
     });
 
     try {
-      // This logs them in AND tells Firebase to remember them for tomorrow!
+      // 1. Wait for Firebase to confirm the login
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
 
-      // 2. NAVIGATE TO USER HOME
-      // We use pushReplacement so they can't hit the "back" button and return to the login screen
+      // 2. ONLY if successful, navigate to Home and clear the backstack
       if (mounted) {
-        Nav.fadeTo(context, Userhomepage());
+        Navigator.pushAndRemoveUntil(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => const Userhomepage(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            },
+            transitionDuration: const Duration(milliseconds: 800),
+          ),
+              (Route<dynamic> route) => false,
+        );
       }
     } on FirebaseAuthException catch (e) {
-      // 3. ERROR HANDLING (Wrong password, etc.)
+      // 3. If it fails, show the error and DO NOT navigate
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -194,54 +206,36 @@ class _UserSignInState extends State<UserSignIn> {
                   child: SizedBox(
                     width: double.infinity,
                     height: 55,
-                    child: ElevatedButton(
+                    child: // Inside your BuildContext, replace the SIGN IN button with this:
+                    ElevatedButton(
                       onPressed: () async {
-                        signIncheck();
-                        // 1. ADDED setState: This forces the screen to redraw immediately so the button turns green.
+                        // 1. Turn button green
                         setState(() {
                           onPressSignInButton = true;
                         });
 
-                        // 2. ADDED await: This tells the code to pause here while the user is on the Demo page.
-                        await Navigator.pushAndRemoveUntil(
-                          context,
+                        // 2. Wait for the Firebase check AND navigation to finish
+                        await signIncheck();
 
-                          // 1. Your custom fade transition route stays exactly the same
-                          PageRouteBuilder(
-                            pageBuilder: (context, animation, secondaryAnimation) => const Userhomepage(),
-                            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: child,
-                              );
-                            },
-                            transitionDuration: const Duration(milliseconds: 800),
-                          ),
-
-                          // 2. THE NEW LINE: This tells Flutter to destroy all previous screens!
-                              (Route<dynamic> route) => false,
-                        );
-
-                        // 3. ADDED second setState: When the user hits the "back" button on the Demo page, this resets the button to Red.
+                        // 3. If they typed a wrong password, the screen didn't change,
+                        // so we reset the button back to red so they can try again.
                         setState(() {
                           onPressSignInButton = false;
                         });
                       },
                       style: ElevatedButton.styleFrom(
-                        // 4. FIXED the color logic: If true -> Green. If false -> Red.
                         backgroundColor: onPressSignInButton
                             ? Colors.green
                             : const Color.fromRGBO(180, 0, 0, 1),
-                        foregroundColor: Colors.white, // Text color
+                        foregroundColor: Colors.white,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            30,
-                          ), // Matches your TextFields
+                          borderRadius: BorderRadius.circular(30),
                         ),
-                        elevation:
-                        5, // Adds a shadow that matches your input fields
+                        elevation: 5,
                       ),
-                      child: const Text(
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
                         'SIGN IN',
                         style: TextStyle(
                           fontSize: 18,
