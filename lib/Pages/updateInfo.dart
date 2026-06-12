@@ -147,8 +147,7 @@ class _UpdateInfoState extends State<UpdateInfo> {
                       return const SizedBox.shrink();
                     }
 
-                    return Expanded(
-                      child: ListTile(
+                    return ListTile(
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
                           tileColor: Colors.grey.shade100,
                           title: Text(
@@ -170,8 +169,7 @@ class _UpdateInfoState extends State<UpdateInfo> {
                               ),
                             ),
                           ),
-                        ),
-                    );
+                        );
                   },
                 );
               },

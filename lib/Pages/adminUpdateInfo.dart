@@ -183,8 +183,7 @@ class _AdminupdateinfoState extends State<Adminupdateinfo> {
                         }
 
                         // 🌟 FIX 3: Clean syntax structure with invalid syntax token variations removed
-                        return Expanded(
-                          child: Card(
+                        return  Card(
                             elevation: 3,
                             margin: const EdgeInsets.symmetric(
                               horizontal: 12,
@@ -340,8 +339,7 @@ class _AdminupdateinfoState extends State<Adminupdateinfo> {
                                 ),
                               ),
                             ),
-                          ),
-                        );
+                          );
                       },
                     );
                   },
