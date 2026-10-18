@@ -22,7 +22,7 @@ class _CommonAdminsigninState extends State<CommonAdminsignin> {
   Future<void> verifyMasterGate() async {
     final String email = emailController.text.trim();
     final String password = passwordController.text.trim();
-    const secretEmail = 'shondhanimarmc@djmc.edu';
+    const secretEmail = 'shondhanImarmc@dJmc.eDu';
     const secretPassword = 'TaravrO33';
     if (email == secretEmail && password == secretPassword) {
       Nav.fadeTo(context, Adminsignin());
